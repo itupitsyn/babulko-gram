@@ -1,3 +1,5 @@
+const { Delegation } = require('../db/models');
+
 const addToLocals = (req, res, next) => {
   res.locals.userName = req.session?.userName;
   res.locals.userId = req.session?.userId;
@@ -20,4 +22,21 @@ const deepCheckUser = (req, res, next) => {
   }
 };
 
-module.exports = { addToLocals, checkUser, deepCheckUser };
+async function allowedToSeeEntries(req, res, next) {
+  
+  if (Number(req.params.userId) === req.session.userId) {
+    next();
+    return;
+  }
+  const deleg = await Delegation.findOne({
+    raw: true,
+    where: {
+      userId: req.params.userId,
+      delegateeId: req.session.userId,
+    },
+  });
+  if (deleg !== null) next();
+  else next(new Error('Forbidden'));
+}
+
+module.exports = { addToLocals, checkUser, deepCheckUser, allowedToSeeEntries };
