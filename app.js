@@ -9,6 +9,7 @@ const FileStore = require('session-file-store')(session);
 require('dotenv').config();
 
 const indexRouter = require('./routers/index');
+const userRouter = require('./routers/user');
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -32,5 +33,6 @@ app.use(
 );
 
 app.use('/', indexRouter);
+app.use('/user', userRouter);
 
 app.listen(PORT, () => console.log(`listening ${PORT}...`));
