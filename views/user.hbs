@@ -1,7 +1,7 @@
 <script defer src="/js/user.js"></script>
 <div class='container'>
-  <div class='row'>
-    <div class="col">
+  {{!-- <div class='row'>
+    <div class="col"> --}}
       <form name='postForm' class='enter'>
 
         <div class="mb-3">
@@ -10,33 +10,33 @@
         </div>
         <button type="submit" class="btn btn-primary">Ввод</button>
       </form>
-    </div>
-    <div class="col" id='allEntries'>
-      <div class='link'>
+    {{!-- </div>
+  </div> --}}
+  <div class="row" id='allEntries'>
+    {{!-- <div class='link'>
 
-        <p>Права пользователя</p>
-        <select class="form-select" aria-label="Default select example">
-          {{#each status}}
-          <option selected>Открыть меню</option>
+      <p>Права пользователя</p>
+      <select class="form-select" aria-label="Default select example">
+        {{#each status}}
+        <option selected>Открыть меню</option>
 
-          <option value="1">{{name}}</option>
-          {{/each}}
+        <option value="1">{{name}}</option>
+        {{/each}}
+    </div> --}}
+    {{#each entries}}
+    <div class="card" style="width: 18rem;">
+      <img src="{{image}}" class="card-img-top" alt="image">
+      <div class="card-body">
+        {{!-- <p class="card-title"> --}}
+          {{text}}
+          {{!-- </p> --}}
+        <audio controls>
+          <source src="{{sound}}" type="audio/mp3">
+        </audio>
       </div>
-      {{#each entries}}
-      <div class="card" style="width: 18rem;">
-        <img src="{{image}}" class="card-img-top" alt="image">
-        <div class="card-body">
-          <h5 class="card-title">{{userId}}</h5>
-          <h3 class="card-title">{{text}}</h3>
-          <audio controls>
-            <source src=`{{sound}}` type="audio/mp3">
-            <a href="viper.mp3">link to the audio</a>
-          </audio>
-        </div>
-      </div>
-      {{/each}}
-
-
     </div>
+    {{/each}}
+
+
   </div>
 </div>

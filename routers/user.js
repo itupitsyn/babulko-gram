@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
     // const Users = await User.findAll({
     //   where: { userId: req.session.userId },
     // });
-    res.render('user', { posts: entries });
+    res.render('user', { entries });
   } catch (err) {
     next(err);
   }

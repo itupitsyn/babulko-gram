@@ -58,7 +58,6 @@ router
         path.join('public', 'uploads', `${req.file.filename}.mp3`),
         Buffer.from(soundData, 'base64'),
       );
-      console.log(req.session.userId);
       const newEntry = await Entry.create({
         image,
         text,
