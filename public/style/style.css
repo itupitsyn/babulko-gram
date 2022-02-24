@@ -23,3 +23,8 @@ justify-content: space-between;
 .enter {
     margin-top: 100px;
 }
+
+.card {
+    width: 1000px;
+    height: 700px;
+}

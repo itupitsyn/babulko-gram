@@ -1,14 +1,14 @@
 const router = require('express').Router();
 const multer = require('multer');
-// const {}
+const { Entry, Status } = require('../db/models');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/uploads')    // путь сохранения файла
+        cb(null, './public/uploads');
     },
     filename: function (req, file, cb) {
 
-        cb(null, file.originalname);  // название будет оригинальным
+        cb(null, file.originalname);
     },
 });
 
@@ -19,10 +19,11 @@ router.get('/', (req, res) => {
     res.render('user');
 });
 
-router.post('/', upload.single('img'), (req, res) => {
-    // console.log(req.body)
+router.post('/', upload.single('img'), async (req, res) => {
+    const entries = await Entry.findAll({ raw: true })
+    const status = await Status.findAll({ raw: true })
     console.log(req.file);
-    res.render('user');
+    res.('user', { entries, status });
 });
 
 module.exports = router;
