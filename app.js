@@ -35,4 +35,16 @@ app.use(
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 
+// error handler
+app.use((err, req, res, next) => {
+  if (err) {
+    const fakeErrObject = { name: err.name, message: err.message };
+    if (err.stack) fakeErrObject.stack = err.stack;
+    fakeErrObject.asString = err.toString();
+    res.status(500).json(fakeErrObject);
+  } else {
+    next();
+  }
+});
+
 app.listen(PORT, () => console.log(`listening ${PORT}...`));
