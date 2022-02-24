@@ -8,6 +8,7 @@ const FileStore = require('session-file-store')(session);
 
 require('dotenv').config();
 
+const apiRouter = require('./routers/api/index');
 const indexRouter = require('./routers/index');
 
 const app = express();
@@ -32,5 +33,6 @@ app.use(
 );
 
 app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 app.listen(PORT, () => console.log(`listening ${PORT}...`));
