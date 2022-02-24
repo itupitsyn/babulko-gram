@@ -1,5 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .body {
-  margin:0;
   background-color: #f9fdc4;
   /* background-color: red; */
   backdrop-filter: blur(30px);
@@ -7,9 +11,16 @@
   font-size: 20px;
 }
 
-ul {
+.navy {
   display: flex;
-  justify-content: end; 
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+nav {
+  display:flex;
+  justify-content: space-between
 }
 
 .navigation {
@@ -26,12 +37,18 @@ li a {
 
 .main-container {
   display: flex;
+  width: 100%;
+  gap: 5%
 }
 
 .help {
   
   border: 2px solid black;
   border-radius: 5px;
+  background-color: white;
+  margin: 5%;
+  padding: 10px;
+  font-family: 'Arimo', sans-serif;
 }
 
 .login-form {
@@ -39,7 +56,7 @@ li a {
     z-index: 1;
     background: #FFFFFF;
     max-width: 50%;
-    margin: 0 auto 100px;
+    margin: 5%;
     padding: 45px;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -79,8 +96,14 @@ li a {
   cursor: pointer;
 }
 
+.message {
+  margin-top: 3%;
+  font-size: 1.5em;
+}
+
 header, footer {
   background-color: #FDB9D8;
   height: 30%;
+  width: 100%;
   font-size: 3em;
 }
