@@ -39,6 +39,7 @@ router
     try {
       const newUser = {};
       newUser.login = req.body.login;
+      newUser.email = req.body.email;
       newUser.password = crypto
         .createHash('sha256')
         .update(req.body.password)

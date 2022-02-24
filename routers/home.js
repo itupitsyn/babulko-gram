@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { User } = require('../db/models/');
+const crypto = require('crypto');
+const { User } = require('../db/models');
 
 const { checkUser, deepCheckUser } = require('../middlewares/allMiddleWares');
 
@@ -12,19 +13,30 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const user = await User.create(req.body);
-  req.session.userName = user.login;
-  req.session.userEmail = user.email;
-  req.session.userId = user.id;
+  const newUser = {};
+  newUser.login = req.body.login;
+  newUser.email = req.body.email;
+  newUser.password = crypto
+    .createHash('sha256')
+    .update(req.body.password)
+    .digest('hex');
+  newUser.statusId = req.body.statusId;
+  const createdUser = await User.create(newUser);
+
+  req.session.userName = createdUser.login;
+  req.session.userEmail = createdUser.email;
+  req.session.userId = createdUser.id;
   res.redirect('/user'); // дописать ручку
 });
 
 router.post('/', async (req, res) => {
-  console.log('tut');
   const { email, password } = req.body;
-  const user = await User.findOne({ where: { email: email } });
+  const user = await User.findOne({ where: { email } });
   if (user) {
-    if (user.password === req.body.password) {
+    if (
+      user.password ===
+      crypto.createHash('sha256').update(password).digest('hex')
+    ) {
       req.session.userName = user.login;
       req.session.userEmail = user.email;
       req.session.userId = user.id;
@@ -33,7 +45,7 @@ router.post('/', async (req, res) => {
       res.send('Wrong password. Please try again');
     }
   } else {
-    res.redirect(`/home/register`);
+    res.redirect('/home/register');
   }
 });
 
