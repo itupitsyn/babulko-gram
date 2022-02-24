@@ -34,7 +34,7 @@ router
         oem: 1,
         psm: 3,
       });
-      const newEntry = await Entry.creat({ image, text });
+      const newEntry = await Entry.create({ image, text });
       res.json(newEntry);
     } catch (err) {
       next(err);
