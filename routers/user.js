@@ -15,15 +15,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-router.get('/', (req, res) => {
-    res.render('user');
+router.get('/', async (req, res) => {
+    res.render('/user', { entries, status });
+    const entries = await Entry.findAll({ raw: true })
+    const status = await Status.findAll({ raw: true })
 });
 
 router.post('/', upload.single('img'), async (req, res) => {
-    const entries = await Entry.findAll({ raw: true })
-    const status = await Status.findAll({ raw: true })
-    console.log(req.file);
-    res.('user', { entries, status });
+    res.redirect('/user');
 });
 
 module.exports = router;
