@@ -16,13 +16,14 @@ const upload = multer({ storage: storage });
 
 
 router.get('/', async (req, res) => {
-    res.render('/user', { entries, status });
-    const entries = await Entry.findAll({ raw: true })
-    const status = await Status.findAll({ raw: true })
+    const entries = await Entry.findAll({ raw: true });
+    const status = await Status.findAll({ raw: true });
+    res.render('user', { entries, status });
 });
 
 router.post('/', upload.single('img'), async (req, res) => {
-    res.redirect('/user');
+    console.log(req.body);
+    res.redirect('/');
 });
 
 module.exports = router;

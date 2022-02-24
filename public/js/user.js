@@ -19,6 +19,7 @@ postForm.addEventListener('submit', async (e) => {
         method: 'POST',
         body: formData,
     });
+    
     if (response.ok) {
         const data = await entries.json();
         allEntries.insertAdjacentHTML('afterbegin', createCard(data));
