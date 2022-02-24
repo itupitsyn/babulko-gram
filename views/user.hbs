@@ -1,45 +1,55 @@
+<script defer src="/js/user.js"></script>
 <div class='container'>
-    <div class='row'>
-        <div class="col" >
-            <form name='postForm' class='enter'>
-                {{!-- <div class="mb-3">
-                    <label for="exampleInputTitle1" class="form-label">Title</label>
-                    <input name='title' type="text" class="form-control" id="exampleInputTitle1">
+  <div class='row'>
+    <div class="col">
+      <form name='postForm' class='enter'>
+        {{!-- <div class="mb-3">
+          <label for="exampleInputTitle1" class="form-label">Title</label>
+          <input name='title' type="text" class="form-control" id="exampleInputTitle1">
 
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputText1" class="form-label">Text</label>
-                    <input name='text' type="text" class="form-control" id="exampleInputText1">
-
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleInputTag1" class="form-label">Tags</label>
-                    <input name='tags' type="text" class="form-control" id="exampleInputTag1">
-                </div> --}}
-                <div class="mb-3">
-                    <label for="exampleInputImg1" class="form-label">Image</label>
-                    <input name='img' type="file" class="form-control" id="exampleInputImg1">
-                </div>
-                <button type="submit" class="btn btn-primary">Ввод</button>
-            </form>
         </div>
-        <div class="col" id='allPosts'>
-            {{#each posts}}
-            <div class="card" style="width: 18rem;">
-                <img src="{{img}}" class="card-img-top" alt="{{title}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{title}}</h5>
-                    <h3 class="card-title">{{text}}</h3>
-                    {{#each Tags}}
-                    <span class="card-text">{{name}}</span>
-                    {{/each}}
+        <div class="mb-3">
+          <label for="exampleInputText1" class="form-label">Text</label>
+          <input name='text' type="text" class="form-control" id="exampleInputText1">
 
-                </div>
-            </div>
-            {{/each}}
         </div>
+
+        <div class="mb-3">
+          <label for="exampleInputTag1" class="form-label">Tags</label>
+          <input name='tags' type="text" class="form-control" id="exampleInputTag1">
+        </div> --}}
+        <div class="mb-3">
+          <label for="exampleInputImg1" class="form-label">Image</label>
+          <input name='img' type="file" class="form-control" id="exampleInputImg1">
+        </div>
+        <button type="submit" class="btn btn-primary">Ввод</button>
+      </form>
     </div>
+    <div class="col" id='allPosts'>
+      {{#each posts}}
+      <div class="card" style="width: 18rem;">
+        <img src="{{img}}" class="card-img-top" alt="{{title}}">
+        <div class="card-body">
+          <h5 class="card-title">{{title}}</h5>
+          <h3 class="card-title">{{text}}</h3>
+          {{#each Tags}}
+          <span class="card-text">{{name}}</span>
+          {{/each}}
+
+        </div>
+      </div>
+      {{/each}}
+      <div class='link'>
+        <p>Статус пользователя</p>
+        <select class="form-select" aria-label="Default select example">
+          {{#each Status}}
+          <option selected>Открыть меню</option>
+
+          <option value="1">{{name}}</option>
+          {{/each}}
+      </div>
+    </div>
+  </div>
 </div>
 {{!-- <form name='postForm'>
   <div class='mb-3'>
@@ -48,12 +58,4 @@
   </div>
 </form>
 
-<div class='link'>
-  <p>Статус пользователя</p>
-  <select class="form-select" aria-label="Default select example">
-    {{#each Status}}
-    <option selected>Открыть меню</option>
-
-    <option value="1">{{name}}</option>
-    {{/each}}
-</div> --}}
+--}}

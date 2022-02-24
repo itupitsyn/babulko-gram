@@ -1,5 +1,9 @@
 const router = require('express').Router();
 const multer = require('multer');
+const path = require('path');
+const googleTTS = require('google-tts-api');
+const fs = require('fs').promises;
+const { Buffer } = require('buffer');
 
 const { Entry } = require('../../db/models');
 
@@ -7,7 +11,7 @@ const tesseract = require('node-tesseract-ocr');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, '../../public/uploads');
+    cb(null, './public/uploads');
   },
   filename(req, file, cb) {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
@@ -26,16 +30,40 @@ router
       next(err);
     }
   })
-  .post(upload.single('image'), async (req, res, next) => {
+  .post(upload.single('img'), async (req, res, next) => {
     try {
-      const image = `/uploads/${req.file.originalname}`;
-      const text = await tesseract.recognize(image, {
+      // image
+      const image = `/uploads/${req.file.filename}`;
+      const imagePath = path.join('public', 'uploads', req.file.filename);
+      // text
+      const text = await tesseract.recognize(imagePath, {
         lang: 'rus+eng',
         oem: 1,
         psm: 3,
       });
-      const newEntry = await Entry.create({ image, text });
-      res.json(newEntry);
+      // const text = dirtyText.match(/[a-zA-Zа-яА-Я\s.,?-]*/gmi).join('');
+      // sound
+      const sound = `/uploads/${req.file.filename}`;
+      const soundParts = await googleTTS.getAllAudioBase64(text, {
+        lang: 'ru',
+        slow: false,
+        host: 'https://translate.google.com',
+        timeout: 10000,
+        splitPunct: ',.?',
+      });
+
+      let soundData = '';
+      soundParts.forEach((el) => {
+        soundData += el.base64;
+      });
+      await fs.writeFile(
+        path.join('public', 'uploads', `${req.file.filename}.mp3`),
+        Buffer.from(soundData, 'base64'),
+      );
+      res.json({ text });
+      return;
+      // const newEntry = await Entry.create({ image, text, sound });
+      // res.json(newEntry);
     } catch (err) {
       next(err);
     }
