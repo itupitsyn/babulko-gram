@@ -14,6 +14,7 @@ const apiRouter = require('./routers/api/index');
 const indexRouter = require('./routers/index');
 const homeRouter = require('./routers/home');
 const userRouter = require('./routers/user');
+const { checkUser } = require('./middlewares/allMiddleWares');
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -41,8 +42,8 @@ app.use(addToLocals);
 
 app.use('/', indexRouter);
 app.use('/home', homeRouter);
-app.use('/user', userRouter);
-app.use('/api', apiRouter);
+app.use('/user', checkUser, userRouter);
+app.use('/api', checkUser, apiRouter);
 
 // error handler
 app.use((err, req, res, next) => {
