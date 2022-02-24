@@ -10,6 +10,7 @@ require('dotenv').config();
 
 const apiRouter = require('./routers/api/index');
 const indexRouter = require('./routers/index');
+const userRouter = require('./routers/user');
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -33,6 +34,7 @@ app.use(
 );
 
 app.use('/', indexRouter);
+app.use('/user', userRouter);
 app.use('/api', apiRouter);
 
 app.listen(PORT, () => console.log(`listening ${PORT}...`));

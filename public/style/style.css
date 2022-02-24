@@ -1,0 +1,25 @@
+.form-control {
+    width: 300px;
+}
+
+.container{
+display: flex;
+margin: 0;
+margin-right: 0;
+justify-content: space-between;
+
+}
+
+.form-select {
+    width: 100px;
+    height: 20px;
+}
+
+.link{
+    display: flex;
+    justify-content: space-between;
+}
+
+.enter {
+    margin-top: 100px;
+}
