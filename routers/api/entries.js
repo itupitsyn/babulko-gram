@@ -41,9 +41,7 @@ router
         oem: 1,
         psm: 3,
       });
-      // const text = dirtyText.match(/[a-zA-Zа-яА-Я\s.,?-]*/gmi).join('');
-      // sound
-      const sound = `/uploads/${req.file.filename}`;
+      const sound = `/uploads/${req.file.filename}.mp3`;
       const soundParts = await googleTTS.getAllAudioBase64(text, {
         lang: 'ru',
         slow: false,
@@ -60,10 +58,14 @@ router
         path.join('public', 'uploads', `${req.file.filename}.mp3`),
         Buffer.from(soundData, 'base64'),
       );
-      res.json({ text });
-      return;
-      // const newEntry = await Entry.create({ image, text, sound });
-      // res.json(newEntry);
+      console.log(req.session.userId);
+      const newEntry = await Entry.create({
+        image,
+        text,
+        sound,
+        userId: req.session.userId,
+      });
+      res.json(newEntry);
     } catch (err) {
       next(err);
     }
