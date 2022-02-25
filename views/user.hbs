@@ -1,52 +1,73 @@
 <script defer src="/js/user.js"></script>
-<div class='container'>
-  {{!-- <div class='row'>
-    <div class="col"> --}}
-      <form name='postForm' class='enter'>
-
-        <div class="mb-3">
-          <label for="exampleInputImg1" class="form-label">Добавить картинку</label>
-          <input name='img' type="file" class="form-control" id="exampleInputImg1">
-        </div>
+<div class="row">
+  <div class="col-auto">
+    <label class="form-label">Чьи картинки посмотреть</label>
+    <select id="allowedUsers" class="form-select" aria-label="Разрешённые пользователи">
+      <option value={{userId}}{{#if selected}} selected{{/if}}>Мои картинки</option>
+      {{#each allowedUsers}}
+      <option value={{dataValues.userId}}{{#if selected}} selected{{/if}}>{{Status.name}} - {{login}}</option>
+      {{/each}}
+    </select>
+    {{#if ourDelegatee}}
+    <form name="ourDelegatee" class="enter mb-3 row">
+      <label class="form-label">Я поделился с</label>
+      <div class="col-auto">
+        <select id="ourDelegatee" class="form-select" aria-label="Разрешённые пользователи">
+          {{#each ourDelegatee}}
+          <option value={{dataValues.userId}}>{{Status.name}} - {{login}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="col-auto d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Запретить</button>
+      </div>
+    </form>
+    {{/if}}
+    {{#unless selected}}
+    <form name="postForm" class="enter mb-3 row">
+      <div class="col-auto">
+        <label for="exampleInputImg1" class="form-label">Добавить картинку</label>
+        <input name="img" type="file" class="form-control" id="exampleInputImg1">
+      </div>
+      <div class="col-auto d-flex align-items-end">
         <button type="submit" class="btn btn-primary">Ввод</button>
-      </form>
-   
-  <div id='allEntries'>
-    {{!-- <div class='link'>
+      </div>
+    </form>
 
-      <p>Права пользователя</p>
-      <select class="form-select" aria-label="Default select example">
-        {{#each status}}
-        <option selected>Открыть меню</option>
+    <form name="delegationForm" class="enter mb-3 row">
+      <div class="col-auto">
 
-        <option value="1">{{name}}</option>
-        {{/each}}
-    </div> --}}
+        <select name="delegatee" class="form-select" aria-label="Поделиться своими картинками">
+          <option selected>Поделиться своими картинками</option>
+          {{#each users}}
+          <option value={{dataValues.userId}}>{{Status.name}} - {{login}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="col-auto d-flex align-items-end">
+        <button id="share access" type="submit" class="btn btn-primary">Поделиться</button>
+      </div>
+    </form>
+    {{/unless}}
+  </div>
 
+  <div id="allEntries" class="col-auto">
     {{#each entries}}
-    <div class="card">
-      <div class="cardText">
-      <div class="img">
-        <img src="{{image}}" class="card-img-top" alt="image">
-      </div>
-      <div class="card-body">
-        {{!-- <p class="card-title"> --}}
+    <div data-id={{id}} class="card">
+      <div class="cardText row">
+        <div class="img col-auto">
+          <img src="{{image}}" class="img" alt="image">
+        </div>
+        <div class="card-body col-auto">
           {{text}}
-          {{!-- </p> --}}
+        </div>
       </div>
-      </div>
-      <div>
+      <div class="row">
         <audio controls>
           <source src="{{sound}}" type="audio/mp3">
         </audio>
       </div>
-
     </div>
     {{/each}}
-
-
   </div>
-  <div> </div> 
-  <div></div>
-  <div></div>
 </div>
