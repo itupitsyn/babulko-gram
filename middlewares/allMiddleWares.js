@@ -23,7 +23,6 @@ const deepCheckUser = (req, res, next) => {
 };
 
 async function allowedToSeeEntries(req, res, next) {
-  
   if (Number(req.params.userId) === req.session.userId) {
     next();
     return;
@@ -36,7 +35,12 @@ async function allowedToSeeEntries(req, res, next) {
     },
   });
   if (deleg !== null) next();
-  else next(new Error('Forbidden'));
+  else next(new Error('Запрещено'));
+}
+
+function itIsCurrentUser(req, res, next) {
+  if (Number(req.body.userId) === Number(req.session.userId)) next();
+  else next(new Error('Операция запрещена'));
 }
 
 module.exports = { addToLocals, checkUser, deepCheckUser, allowedToSeeEntries };

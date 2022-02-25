@@ -1,5 +1,11 @@
 const router = require('express').Router();
-const { Entry, User } = require('../db/models');
+const {
+  Entry,
+  User,
+  Status,
+  Sequelize: { Op },
+  Delegation,
+} = require('../db/models');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -11,7 +17,20 @@ router.get('/', async (req, res, next) => {
     // const Users = await User.findAll({
     //   where: { userId: req.session.userId },
     // });
-    res.render('user', { entries });
+    const delegs = await Delegation.findAll({
+      where: { userId: req.session.userId },
+    });
+    const users = await User.findAll({
+      attributes: [['id', 'userId'], 'login'],
+      where: {
+        [Op.not]: [{ id: req.session.userId }],
+        id: {
+          [Op.notIn]: !delegs ? [] : delegs.map((el) => el.delegateeId),
+        },
+      },
+      include: { model: Status, attributes: ['name'] },
+    });
+    res.render('user', { entries, users });
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { Delegation, User } = require('../../db/models');
+const { itIsCurrentUser } = require('../../middlewares/allMiddleWares');
 
 router
   .route('/')
@@ -13,7 +14,10 @@ router
   })
   .post(async (req, res, next) => {
     try {
-      const newDeleg = await Delegation.create(req.body);
+      console.log(req.body);
+      const { userId } = req.session;
+      const { delegateeId } = req.body;
+      const newDeleg = await Delegation.create({ userId, delegateeId });
       res.send(newDeleg);
     } catch (err) {
       next(err);
