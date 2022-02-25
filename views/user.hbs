@@ -5,14 +5,13 @@
       <form name='postForm' class='enter'>
 
         <div class="mb-3">
-          <label for="exampleInputImg1" class="form-label">Image</label>
+          <label for="exampleInputImg1" class="form-label">Добавить картинку</label>
           <input name='img' type="file" class="form-control" id="exampleInputImg1">
         </div>
         <button type="submit" class="btn btn-primary">Ввод</button>
       </form>
-    {{!-- </div>
-  </div> --}}
-  <div class="row" id='allEntries'>
+   
+  <div id='allEntries'>
     {{!-- <div class='link'>
 
       <p>Права пользователя</p>
@@ -23,20 +22,31 @@
         <option value="1">{{name}}</option>
         {{/each}}
     </div> --}}
+
     {{#each entries}}
-    <div class="card" style="width: 18rem;">
-      <img src="{{image}}" class="card-img-top" alt="image">
+    <div class="card">
+      <div class="cardText">
+      <div class="img">
+        <img src="{{image}}" class="card-img-top" alt="image">
+      </div>
       <div class="card-body">
         {{!-- <p class="card-title"> --}}
           {{text}}
           {{!-- </p> --}}
+      </div>
+      </div>
+      <div>
         <audio controls>
           <source src="{{sound}}" type="audio/mp3">
         </audio>
       </div>
+
     </div>
     {{/each}}
 
 
   </div>
+  <div> </div> 
+  <div></div>
+  <div></div>
 </div>

@@ -1,5 +1,8 @@
 .form-control {
     width: 300px;
+    position: relative;
+  
+    
 }
 
 .container{
@@ -16,15 +19,46 @@ justify-content: space-between;
 }
 
 .link{
-    display: flex;
-    justify-content: space-between;
+    position:relative;
+    right: 1050px;
+
 }
 
 .enter {
     margin-top: 100px;
+    margin-right: 60px;
 }
 
+.img {
+    /* overflow:hidden; */
+    /* max-width: 50%;
+    height: auto; */
+    width:300px; transition:width 0.5s ease;
+  
+  /* width: 500px;
+  height: 300px;
+  overflow:auto */
+
+}
+.mb-3 {
+    width: 300px;
+}
+
+#exampleInputImg1 {
+    margin-right: 40px;
+
+}
+
+.cardText{
+display: flex;
+justify-content: space-between;
+
+}
+
+.cardText:hover img { width:700px; }
+
 .card {
-    width: 1000px;
-    height: 700px;
+   align-self: center;
+   box-shadow: inset x y blur spread color;
+   box-shadow: 3px 3px 3px #777;
 }
