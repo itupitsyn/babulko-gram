@@ -62,3 +62,21 @@ justify-content: space-between;
    box-shadow: inset x y blur spread color;
    box-shadow: 3px 3px 3px #777;
 }
+.conprof{
+    display: flex;
+    margin-left: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+.inputProf{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+/* .edit{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+} */
