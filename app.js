@@ -8,8 +8,11 @@ const FileStore = require('session-file-store')(session);
 
 require('dotenv').config();
 
+const { addToLocals } = require('./middlewares/allMiddleWares');
+
 const apiRouter = require('./routers/api/index');
 const indexRouter = require('./routers/index');
+const homeRouter = require('./routers/home');
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -21,6 +24,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.static(path.join(process.env.PWD, 'public')));
 app.use(cookieParser());
+
 app.use(
   session({
     secret: process.env.SECRET,
@@ -32,7 +36,10 @@ app.use(
   }),
 );
 
+app.use(addToLocals);
+
 app.use('/', indexRouter);
+app.use('/home', homeRouter);
 app.use('/api', apiRouter);
 
 app.listen(PORT, () => console.log(`listening ${PORT}...`));
