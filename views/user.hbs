@@ -8,6 +8,21 @@
       <option value={{dataValues.userId}}{{#if selected}} selected{{/if}}>{{Status.name}} - {{login}}</option>
       {{/each}}
     </select>
+    {{#if ourDelegatee}}
+    <form name="ourDelegatee" class="enter mb-3 row">
+      <label class="form-label">Я поделился с</label>
+      <div class="col-auto">
+        <select id="ourDelegatee" class="form-select" aria-label="Разрешённые пользователи">
+          {{#each ourDelegatee}}
+          <option value={{dataValues.userId}}>{{Status.name}} - {{login}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="col-auto d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Запретить</button>
+      </div>
+    </form>
+    {{/if}}
     {{#unless selected}}
     <form name="postForm" class="enter mb-3 row">
       <div class="col-auto">
@@ -41,7 +56,7 @@
     <div data-id={{id}} class="card">
       <div class="cardText row">
         <div class="img col-auto">
-          <img src="{{image}}" class="card-img-top" alt="image">
+          <img src="{{image}}" class="img" alt="image">
         </div>
         <div class="card-body col-auto">
           {{text}}

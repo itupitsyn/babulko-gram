@@ -17,11 +17,20 @@ router
   })
   .post(async (req, res, next) => {
     try {
-      console.log(req.body);
       const { userId } = req.session;
       const { delegateeId } = req.body;
       const newDeleg = await Delegation.create({ userId, delegateeId });
       res.send(newDeleg);
+    } catch (err) {
+      next(err);
+    }
+  })
+  .delete(async (req, res, next) => {
+    try {
+      await Delegation.destroy({
+        where: { delegateeId: req.body.delegateeId, userId: req.session.userId },
+      });
+      res.end();
     } catch (err) {
       next(err);
     }

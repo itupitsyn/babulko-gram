@@ -2,33 +2,32 @@
 
 
 <div class="conprof">
-    <div class="inputProf">
-<form name="profileForm" method="POST" action="/profile">
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Пароль</label>
-    <input name="password" type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  <div class="mb-3">
-    <label for="exampleStatus1" class="form-label">Статус</label>
-    <input name='name'type="text" class="form-control" id="exampleStatus1" >
-  </div>
-  <select name="statuses">
+  <div class="inputProf">
+    <form name="profileForm" method="POST" action="/profile">
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Пароль</label>
+        <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+      </div>
+      <div class="mb-3">
+        <label for="exampleStatus1" class="form-label">Статус</label>
+        <input name='name' type="text" class="form-control" id="exampleStatus1">
+      </div>
+      <select name="statuses">
         <option value="">Выберите значение статуса</option>
         {{#each status}}
-          <option value="{{this.name}}">{{this.name}}</option>
+        <option value="{{this.name}}">{{this.name}}</option>
         {{/each}}
       </select>
-  <div>
-  <button type="submit" class="btn btn-primary">Применить</button>
-</div>
-  </form>
-  
-</div>
-{{!-- <div class="edit">
-    <a href="/profile">редактировать</a>
-    <a href="/profile">редактировать</a>
-    <a href="/profile">редактировать</a>
-    <a href="/profile">редактировать</a>
-</div> --}}
+      <div>
+        <button type="submit" class="btn btn-primary">Применить</button>
+      </div>
+    </form>
 
+  </div>
+  {{!-- <div class="edit">
+    <a href="/profile">редактировать</a>
+    <a href="/profile">редактировать</a>
+    <a href="/profile">редактировать</a>
+    <a href="/profile">редактировать</a>
+  </div> --}}
 </div>

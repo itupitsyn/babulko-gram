@@ -1,4 +1,4 @@
-const { postForm, delegationForm } = document.forms;
+const { postForm, delegationForm, ourDelegatee } = document.forms;
 const allEntries = document.querySelector('#allEntries');
 const allowedUsers = document.querySelector('#allowedUsers');
 
@@ -7,7 +7,7 @@ function createCard(data) {
   <div data-id=${data.id} class="card">
     <div class="cardText row">
       <div class="img col-auto">
-        <img src="${data.image}" class="card-img-top" alt="image">
+        <img src="${data.image}" class="img" alt="image">
       </div>
       <div class="card-body col-auto">
       ${data.text}
@@ -22,6 +22,31 @@ function createCard(data) {
   `;
 }
 
+ourDelegatee?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const id = e.target.querySelector('select').value;
+    const res = await fetch('/api/delegations', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ delegateeId: id }),
+    });
+    console.log(res);
+    if (res.ok) {
+      const elem = e.target.querySelector(`option[value="${id}"]`);
+      console.log(elem);
+      elem.remove();
+    } else {
+      alert('Что то пошло не так, перезагрузите страницу!');
+    }
+  } catch (error) {
+    console.log(error);
+    alert('Что то пошло не так, перезагрузите страницу!');
+  }
+});
+
 postForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(postForm);
@@ -35,6 +60,7 @@ postForm?.addEventListener('submit', async (e) => {
   } else {
     alert('Что то пошло не так, перезагрузите страницу!');
   }
+  e.target.reset();
 });
 
 delegationForm?.addEventListener('submit', async (e) => {
