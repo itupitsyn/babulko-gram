@@ -43,4 +43,10 @@ function itIsCurrentUser(req, res, next) {
   else next(new Error('Операция запрещена'));
 }
 
-module.exports = { addToLocals, checkUser, deepCheckUser, allowedToSeeEntries };
+module.exports = {
+  addToLocals,
+  checkUser,
+  deepCheckUser,
+  allowedToSeeEntries,
+  itIsCurrentUser,
+};

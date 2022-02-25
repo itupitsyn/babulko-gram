@@ -28,11 +28,10 @@ postForm.addEventListener('submit', async (e) => {
     method: 'POST',
     body: formData,
   });
-  const data = await response.json();
   if (response.ok) {
+    const data = await response.json();
     allEntries.insertAdjacentHTML('afterbegin', createCard(data));
   } else {
-    console.log(data);
     alert('Что то пошло не так, перезагрузите страницу!');
   }
 });
