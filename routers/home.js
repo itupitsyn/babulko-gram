@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const crypto = require('crypto');
 const { User, Status } = require('../db/models');
 
 const { checkUser, deepCheckUser } = require('../middlewares/allMiddleWares');
@@ -13,8 +14,11 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { login, email, password, name, statuses } = req.body;
-  console.log(req.body);
+  const { login, email, name, statuses } = req.body;
+  password = crypto
+    .createHash('sha256')
+    .update(req.body.password)
+    .digest('hex');
   if (statuses === '' && name === '') {
     res.send ('Поле "статус" не может быть пустым. Пожалуйста, введите статус');
   };
@@ -24,8 +28,6 @@ router.post('/register', async (req, res) => {
     user = await User.create( {login, email, password, statusId: status.id})
   } else { 
     let st = await Status.findOne({where: {name: statuses}})
-    console.log(st)
-    console.log(st.id)
     user = await User.create( {login, email, password, statusId: st.id })
   }
   req.session.userName = user.login;
@@ -36,15 +38,18 @@ router.post('/register', async (req, res) => {
 
 router.post('/', async(req,res) => {
   const { email, password } = req.body;
-  const user = await User.findOne( {where: {email: email}})
+  const user = await User.findOne({ where: { email } });
   if (user) {
-    if(user.password === req.body.password) {
+    if (
+      user.password ===
+      crypto.createHash('sha256').update(password).digest('hex')
+    ) {
       req.session.userName = user.login;
       req.session.userEmail = user.email;
       req.session.userId = user.id;
-      res.redirect('/user') // дописать ручку
+      res.redirect('/user'); // дописать ручку
     } else {
-      res.send ('Wrong password. Please try again');
+      res.send ('Неправильный пароль. Пожалуйста, попррбуйте еще раз!');
     }
   } else {
     res.redirect(`/home/register`);
@@ -63,14 +68,14 @@ router.get('/user', checkUser, deepCheckUser, async (req,res) => {
 
 })
 
-router.get('/user', (req, res) => {
-  res.redirect('/home/user');
-})
+// router.get('/user', (req, res) => {
+//   res.redirect('/home/user');
+// })
 
 
-router.get('/logout', (req,res) => {
+router.get('/logout', (req, res) => {
   req.session.destroy();
-  res.redirect('/')
-})
+  res.redirect('/');
+});
 
 module.exports = router;
