@@ -1,4 +1,6 @@
 const router = require('express').Router();
+
+const { allowedToSeeEntries } = require('../middlewares/allMiddleWares');
 const {
   Entry,
   User,
@@ -7,16 +9,16 @@ const {
   Delegation,
 } = require('../db/models');
 
-router.get('/', async (req, res, next) => {
+router.get('/:userId?', allowedToSeeEntries, async (req, res, next) => {
   try {
     const entries = await Entry.findAll({
-      where: { userId: req.session.userId },
+      where: {
+        userId: req.params.userId ? req.params.userId : req.session.userId,
+      },
       raw: true,
       order: [['updatedAt', 'desc']],
     });
-    // const Users = await User.findAll({
-    //   where: { userId: req.session.userId },
-    // });
+
     const delegs = await Delegation.findAll({
       where: { userId: req.session.userId },
     });
@@ -30,7 +32,31 @@ router.get('/', async (req, res, next) => {
       },
       include: { model: Status, attributes: ['name'] },
     });
-    res.render('user', { entries, users });
+
+    const delegators = await Delegation.findAll({
+      where: { delegateeId: req.session.userId },
+    });
+    const allowedUsers = await User.findAll({
+      attributes: [['id', 'userId'], 'login'],
+      where: {
+        id: {
+          [Op.in]: !delegs ? [] : delegators.map((el) => el.userId),
+        },
+      },
+      include: { model: Status, attributes: ['name'] },
+    });
+    allowedUsers.forEach(
+      (el) =>
+        (el.selected =
+          Number(req.params.userId) === Number(el.dataValues.userId)),
+    );
+    // console.log(req.params.userId, req.session.userId);
+    res.render('user', {
+      entries,
+      users,
+      allowedUsers,
+      selected: Number(req.params.userId) !== Number(req.session.userId),
+    });
   } catch (err) {
     next(err);
   }

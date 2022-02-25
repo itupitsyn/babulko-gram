@@ -23,6 +23,10 @@ const deepCheckUser = (req, res, next) => {
 };
 
 async function allowedToSeeEntries(req, res, next) {
+  if (!req.params.userId) {
+    next();
+    return;
+  }
   if (Number(req.params.userId) === req.session.userId) {
     next();
     return;

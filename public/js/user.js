@@ -1,5 +1,6 @@
 const { postForm, delegationForm } = document.forms;
 const allEntries = document.querySelector('#allEntries');
+const allowedUsers = document.querySelector('#allowedUsers');
 
 function createCard(data) {
   return `
@@ -21,7 +22,7 @@ function createCard(data) {
   `;
 }
 
-postForm.addEventListener('submit', async (e) => {
+postForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(postForm);
   const response = await fetch('/api/entries', {
@@ -36,7 +37,7 @@ postForm.addEventListener('submit', async (e) => {
   }
 });
 
-delegationForm.addEventListener('submit', async (e) => {
+delegationForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   try {
     const delegateeId = new FormData(document.forms.delegationForm).get(
@@ -58,8 +59,17 @@ delegationForm.addEventListener('submit', async (e) => {
       console.log(data);
       alert('Что то пошло не так, перезагрузите страницу!');
     }
-  } catch(error) {
+  } catch (error) {
     console.log(error);
     alert('Что то пошло не так, перезагрузите страницу!');
+  }
+});
+
+allowedUsers?.addEventListener('change', (e) => {
+  const id = e.target.value;
+  if (Number.isNaN(Number(id))) {
+    window.location = `${window.location.origin}/user`;
+  } else {
+    window.location = `${window.location.origin}/user/${id}`;
   }
 });
