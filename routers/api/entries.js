@@ -2,8 +2,8 @@ const router = require('express').Router();
 const multer = require('multer');
 const path = require('path');
 const googleTTS = require('google-tts-api');
-// const tesseract = require('node-tesseract-ocr');
-// const { Buffer } = require('buffer');
+const tesseract = require('node-tesseract-ocr');
+const { Buffer } = require('buffer');
 const FormData = require('form-data');
 const axios = require('axios');
 const fs = require('fs').promises;
@@ -45,34 +45,33 @@ router
       const image = `/uploads/${req.file.filename}`;
       const imagePath = path.join('public', 'uploads', req.file.filename);
       // text
-      /*
-      tesseract-ocr - пока что уберём, попробуем внешний сервис
-      const text = await tesseract.recognize(imagePath, {
-        lang: 'rus',
-        oem: 3,
-        psm: 3,
-      });
-      */
-
-      const imgFile = await fs.readFile(imagePath);
-      const form = new FormData();
-      form.append('file', imgFile, req.file.filename);
-      form.append('language', 'rus');
-      const recognition = await axios.post(
-        'https://api.ocr.space/parse/image',
-        form,
-        {
-          headers: {
-            ...form.getHeaders(),
-            apikey: process.env.OCRKEY,
+      let text = '';
+      try {
+        const imgFile = await fs.readFile(imagePath);
+        const form = new FormData();
+        form.append('file', imgFile, req.file.filename);
+        form.append('language', 'rus');
+        const recognition = await axios.post(
+          'https://api.ocr.space/parse/image',
+          form,
+          {
+            headers: {
+              ...form.getHeaders(),
+              apikey: process.env.OCRKEY,
+            },
           },
-        },
-      );
-      const text = recognition.data.ParsedResults[0].ParsedText.replaceAll(
-        '\r\n',
-        ' ',
-      ).replaceAll('\n', ' ');
-      console.log(text);
+        );
+        text = recognition.data.ParsedResults[0].ParsedText;
+      } catch {
+        text = await tesseract.recognize(imagePath, {
+          lang: 'rus',
+          oem: 3,
+          psm: 3,
+        });
+      }
+      // console.log('puk');
+      text = text.replaceAll('\r\n', ' ').replaceAll('\n', ' ');
+
       // sound
       let sound;
       if (text) {
