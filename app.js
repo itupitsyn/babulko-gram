@@ -14,6 +14,7 @@ const apiRouter = require('./routers/api/index');
 const indexRouter = require('./routers/index');
 const homeRouter = require('./routers/home');
 const userRouter = require('./routers/user');
+const profileRouter = require('./routers/profile');
 const { checkUser } = require('./middlewares/allMiddleWares');
 
 const app = express();
@@ -44,6 +45,8 @@ app.use('/', indexRouter);
 app.use('/home', homeRouter);
 app.use('/user', checkUser, userRouter);
 app.use('/api', checkUser, apiRouter);
+app.use('/profile', checkUser, profileRouter);
+
 
 // error handler
 app.use((err, req, res, next) => {
