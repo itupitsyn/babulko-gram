@@ -2,9 +2,12 @@ const router = require('express').Router();
 const multer = require('multer');
 const path = require('path');
 const googleTTS = require('google-tts-api');
-const tesseract = require('node-tesseract-ocr');
+// const tesseract = require('node-tesseract-ocr');
+// const { Buffer } = require('buffer');
+const FormData = require('form-data');
+const axios = require('axios');
 const fs = require('fs').promises;
-const { Buffer } = require('buffer');
+require('dotenv').config();
 
 const { Entry } = require('../../db/models');
 const { allowedToSeeEntries } = require('../../middlewares/allMiddleWares');
@@ -14,8 +17,10 @@ const storage = multer.diskStorage({
     cb(null, './public/uploads');
   },
   filename(req, file, cb) {
+    const foundExt = file.originalname.match(/.*\.(\w*)/i);
+    const ext = foundExt ? `.${foundExt[1]}` : '';
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${file.fieldname}-${uniqueSuffix}`);
+    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
   },
 });
 const upload = multer({ storage });
@@ -40,27 +45,55 @@ router
       const image = `/uploads/${req.file.filename}`;
       const imagePath = path.join('public', 'uploads', req.file.filename);
       // text
+      /*
+      tesseract-ocr - пока что уберём, попробуем внешний сервис
       const text = await tesseract.recognize(imagePath, {
         lang: 'rus',
         oem: 3,
         psm: 3,
       });
-      const sound = `/uploads/${req.file.filename}.mp3`;
-      const soundParts = await googleTTS.getAllAudioBase64(text, {
-        lang: 'ru',
-        slow: false,
-        host: 'https://translate.google.com',
-        timeout: 10000,
-      });
+      */
 
-      let soundData = '';
-      soundParts.forEach((el) => {
-        soundData += el.base64;
-      });
-      await fs.writeFile(
-        path.join('public', 'uploads', `${req.file.filename}.mp3`),
-        Buffer.from(soundData, 'base64'),
+      const imgFile = await fs.readFile(imagePath);
+      const form = new FormData();
+      form.append('file', imgFile, req.file.filename);
+      form.append('language', 'rus');
+      const recognition = await axios.post(
+        'https://api.ocr.space/parse/image',
+        form,
+        {
+          headers: {
+            ...form.getHeaders(),
+            apikey: process.env.OCRKEY,
+          },
+        },
       );
+      const text = recognition.data.ParsedResults[0].ParsedText.replaceAll(
+        '\r\n',
+        ' ',
+      ).replaceAll('\n', ' ');
+      console.log(text);
+      // sound
+      let sound;
+      if (text) {
+        sound = `/uploads/${req.file.filename}.mp3`;
+        const soundParts = await googleTTS.getAllAudioBase64(text, {
+          lang: 'ru',
+          slow: false,
+          host: 'https://translate.google.com',
+          timeout: 10000,
+        });
+        let soundData = '';
+        soundParts.forEach((el) => {
+          soundData += el.base64;
+        });
+        await fs.writeFile(
+          path.join('public', 'uploads', `${req.file.filename}.mp3`),
+          Buffer.from(soundData, 'base64'),
+        );
+      } else {
+        sound = '';
+      }
       const newEntry = await Entry.create({
         image,
         text,
