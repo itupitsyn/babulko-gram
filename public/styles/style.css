@@ -1,0 +1,11 @@
+body {
+  margin:0;
+  background-color: #E5E5E5;
+  backdrop-filter: blur(30px);
+  font-family: Josefin Sans;
+  font-size: 20px;
+}
+
+footer {
+  background-color: #FDB9D8;
+}
