@@ -11,22 +11,6 @@
        <h2 class="card-title">${entries.text}</h2>`;
 }
 
-<<<<<<< HEAD
- postForm.addEventListener('submit', async (e) => {
-   e.preventDefault();
-   const formData = new FormData(postForm);
-   const response = await fetch('/api/entries', {
-     method: 'POST',
-     body: formData,
-   });
-   if (response.ok) {
-     const data = await response.json();
-     allEntries.insertAdjacentHTML('afterbegin', createCard(data));
-   } else {
-     alert('Что то пошло не так, перезагрузите страницу!');
-   }
- });
-=======
 postForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(postForm);
@@ -42,4 +26,3 @@ postForm.addEventListener('submit', async (e) => {
     alert('Что то пошло не так, перезагрузите страницу!');
   }
 });
->>>>>>> main
