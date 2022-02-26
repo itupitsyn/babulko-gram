@@ -7,17 +7,15 @@ const checkUser = (req, res, next) => {
   if (req.session.userName) {
     next(); // если юзер есть в сессии, пожалуйста, проходи дальше
   } else {
-    res.redirect('/entries/register') // если юзера нет, то надо залогиниться
+    res.redirect('/home/register') // если юзера нет, то надо залогиниться
   }
 }
 
 const deepCheckUser = (req, res, next) => {
-  // console.log('deepCheckUser');
-  // console.log(req.params.id, req.session.userId);
   if (Number(req.session.userId) === Number(req.params.id)) {
     next(); // если юзер есть в сессии, пожалуйста, проходи дальше
   } else {
-    res.redirect('/entries/register') // если юзера нет, то надо залогиниться
+    res.redirect('/home/register') // если юзера нет, то надо залогиниться
   }
 }
 

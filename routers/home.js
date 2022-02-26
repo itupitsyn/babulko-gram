@@ -20,7 +20,9 @@ router.post('/register', async (req, res) => {
     .update(req.body.password)
     .digest('hex');
   if (statuses === '' && name === '') {
-    res.send ('Поле "статус" не может быть пустым. Пожалуйста, введите статус');
+    res.render('error', {
+      message: 'Поле "статус" не может быть пустым. Пожалуйста, введите статус!',
+    });
   };
   let user;
   if (statuses === '') {
@@ -49,7 +51,10 @@ router.post('/', async(req,res) => {
       req.session.userId = user.id;
       res.redirect('/user'); // дописать ручку
     } else {
-      res.send ('Неправильный пароль. Пожалуйста, попррбуйте еще раз!');
+      res.render('error', {
+        message: 'Неправильный пароль. Пожалуйста, попробуйте еще раз!',
+        error: {}
+      });
     }
   } else {
     res.redirect(`/home/register`);
@@ -57,19 +62,24 @@ router.post('/', async(req,res) => {
 
 })
 
-router.get('/', (req,res) => {
-  const { statusFromUser } = req.body;
-  const status = Status.findOne({ where: {status} })
-})
+// router.get('/', (req,res) => {
+//   const { statusFromUser } = req.body;
+//   const status = Status.findOne({ where: {status} })
+// })
 
-router.get('/user', checkUser, deepCheckUser, async (req,res) => {
-  const user = await User.findByPk(req.params.id);
-  res.render('/user', {user}); // переходим на user.hbs
+// router.get('/user', checkUser, deepCheckUser, async (req,res) => {
+//   const user = await User.findByPk(req.params.id);
+//   // res.locals.bla = 'tyytjgjyg'
+//   res.render('user', {user}); // переходим на user.hbs
 
-})
+// })
 
 // router.get('/user', (req, res) => {
 //   res.redirect('/home/user');
+// })
+
+// router.get('/profile' ,(req, res) => {
+//   res.render('/profile')
 // })
 
 

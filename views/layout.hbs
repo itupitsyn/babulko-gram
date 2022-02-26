@@ -24,10 +24,12 @@
     <img src="/img1.png" alt="Лого">
         <ul class="navy">
           <li class="navigation"><a href="/">Домашняя страница</a></li>
-          <li class="navigation"><a href="/home/register">Регистрация</a></li> 
           {{#if userName}}  
-          <li class="navigation"><a href="/home/logout">Выход</a></li>
-          <li class="navigation"><a href="/user">Вернуться в профиль</a></li>  
+          <li class="navigation"><a href="/user">Вернуться к постам</a></li>
+          <li class="navigation"><a href="/profile">Профиль</a></li>
+          <li class="navigation"><a href="/home/logout">Выход</a></li> 
+          {{else}}  
+          <li class="navigation"><a href="/home/register">Регистрация</a></li> 
           {{/if}}                
         </ul>
       </nav>
