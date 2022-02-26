@@ -2,12 +2,12 @@ const router = require('express').Router();
 const multer = require('multer');
 const path = require('path');
 const googleTTS = require('google-tts-api');
+const tesseract = require('node-tesseract-ocr');
 const fs = require('fs').promises;
 const { Buffer } = require('buffer');
 
 const { Entry } = require('../../db/models');
-
-const tesseract = require('node-tesseract-ocr');
+const { allowedToSeeEntries } = require('../../middlewares/allMiddleWares');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -24,7 +24,11 @@ router
   .route('/')
   .get(async (req, res, next) => {
     try {
-      const entries = await Entry.findAll({ raw: true });
+      const entries = await Entry.findAll({
+        order: [['updatedAt', 'desc']],
+        where: { userId: req.session.userId },
+        raw: true,
+      });
       res.json(entries);
     } catch (err) {
       next(err);
@@ -37,8 +41,8 @@ router
       const imagePath = path.join('public', 'uploads', req.file.filename);
       // text
       const text = await tesseract.recognize(imagePath, {
-        lang: 'rus+eng',
-        oem: 1,
+        lang: 'rus',
+        oem: 3,
         psm: 3,
       });
       const sound = `/uploads/${req.file.filename}.mp3`;
@@ -47,7 +51,6 @@ router
         slow: false,
         host: 'https://translate.google.com',
         timeout: 10000,
-        splitPunct: ',.?',
       });
 
       let soundData = '';
@@ -69,6 +72,19 @@ router
       next(err);
     }
   });
+
+router.get('/users/:userId', allowedToSeeEntries, async (req, res, next) => {
+  try {
+    const entries = await Entry.findAll({
+      order: [['updatedAt', 'desc']],
+      where: { userId: req.params.userId },
+      raw: true,
+    });
+    res.json(entries);
+  } catch (err) {
+    next(err);
+  }
+});
 
 router
   .route('/:id')

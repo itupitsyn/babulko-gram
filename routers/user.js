@@ -6,6 +6,7 @@ router.get('/', async (req, res, next) => {
     const entries = await Entry.findAll({
       where: { userId: req.session.userId },
       raw: true,
+      order: [['updatedAt', 'desc']],
     });
     // const Users = await User.findAll({
     //   where: { userId: req.session.userId },
